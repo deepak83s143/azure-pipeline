@@ -9,13 +9,41 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-- task: TerraformTask@5
-  inputs:
-    provider: 'azurerm'
-    command: 'init'
-    backendServiceArm: 'deepak-pool'
-    backendAzureRmResourceGroupName: 'mademi-rg'
-    backendAzureRmStorageAccountName: 'mademisa'
-    backendAzureRmContainerName: 'mademistatefiles'
-    backendAzureRmKey: 'azurepipeline.terraform.tfstate'
-
+stages:
+  - stage: Init
+    displayName: Terraform Init
+    jobs:
+      - job: InfraInit
+        displayName: InfraInit
+        steps:
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'deepak-pool'
+              backendAzureRmResourceGroupName: 'mademi-rg'
+              backendAzureRmStorageAccountName: 'mademisa'
+              backendAzureRmContainerName: 'mademistatefiles'
+              backendAzureRmKey: 'azurepipeline.terraform.tfstate'
+  - stage: 
+    displayName: Infra Provisioning Planning
+    jobs:
+      - job: InfraProvisioning
+        displayName: InfraProvisioning
+        steps:
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              environmentServiceNameAzureRM: 'deepak-pool'
+  - stage: 
+    displayName: Infra Provisioning apply
+    jobs:
+      - job: InfraApply
+        displayName: InfraApply
+        steps:
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              environmentServiceNameAzureRM: 'deepak-pool'
