@@ -1,0 +1,67 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  name: mademi_pool
+
+stages:
+  - stage: Init
+    displayName: Terraform Init
+    jobs:
+      - job: InfraInit
+        displayName: InfraInit
+        steps:
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'deepak-pool'
+              backendAzureRmResourceGroupName: 'mademi-rg'
+              backendAzureRmStorageAccountName: 'mademisa'
+              backendAzureRmContainerName: 'mademistatefiles'
+              backendAzureRmKey: 'azurepipeline.terraform.tfstate'
+  - stage: 
+    displayName: Infra Provisioning Planning
+    jobs:
+      - job: InfraProvisioning
+        displayName: InfraProvisioning
+        steps:
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'deepak-pool'
+              backendAzureRmResourceGroupName: 'mademi-rg'
+              backendAzureRmStorageAccountName: 'mademisa'
+              backendAzureRmContainerName: 'mademistatefiles'
+              backendAzureRmKey: 'azurepipeline.terraform.tfstate'
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              environmentServiceNameAzureRM: 'deepak-pool'
+  - stage: 
+    displayName: Infra Provisioning apply
+    jobs:
+      - job: InfraApply
+        displayName: InfraApply
+        steps:
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'deepak-pool'
+              backendAzureRmResourceGroupName: 'mademi-rg'
+              backendAzureRmStorageAccountName: 'mademisa'
+              backendAzureRmContainerName: 'mademistatefiles'
+              backendAzureRmKey: 'azurepipeline.terraform.tfstate'
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              environmentServiceNameAzureRM: 'deepak-pool'
