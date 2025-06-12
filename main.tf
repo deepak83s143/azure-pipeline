@@ -20,6 +20,7 @@ resource "azurerm_subnet" "mademi_subnet" {
 resource "azurerm_public_ip" "mademi_pip" {
   name = "pip_mademi"
   location = azurerm_resource_group.mademi_rg.location
+  sku = "Basic"
   allocation_method = "Dynamic"
   resource_group_name = azurerm_resource_group.mademi_rg.name
 }
