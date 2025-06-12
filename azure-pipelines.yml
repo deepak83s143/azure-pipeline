@@ -34,6 +34,15 @@ stages:
           - task: TerraformTask@5
             inputs:
               provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'deepak-pool'
+              backendAzureRmResourceGroupName: 'mademi-rg'
+              backendAzureRmStorageAccountName: 'mademisa'
+              backendAzureRmContainerName: 'mademistatefiles'
+              backendAzureRmKey: 'azurepipeline.terraform.tfstate'
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
               command: 'plan'
               environmentServiceNameAzureRM: 'deepak-pool'
   - stage: 
@@ -42,6 +51,15 @@ stages:
       - job: InfraApply
         displayName: InfraApply
         steps:
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'deepak-pool'
+              backendAzureRmResourceGroupName: 'mademi-rg'
+              backendAzureRmStorageAccountName: 'mademisa'
+              backendAzureRmContainerName: 'mademistatefiles'
+              backendAzureRmKey: 'azurepipeline.terraform.tfstate'
           - task: TerraformTask@5
             inputs:
               provider: 'azurerm'
