@@ -4,24 +4,24 @@ resource "azurerm_resource_group" "mademi_rg" {
 }
 
 resource "azurerm_virtual_network" "mademi_vnet" {
-  name = "vnet-1-mademi"
-  location = "centralindia"
+  name                = "vnet-1-mademi"
+  location            = "centralindia"
   resource_group_name = azurerm_resource_group.mademi_rg.name
-  address_space = [ "10.0.0.0/16" ]
+  address_space       = ["10.0.0.0/16"]
 }
 
 resource "azurerm_subnet" "mademi_subnet" {
-  name = "subnet-1-mademi"
-  resource_group_name = azurerm_resource_group.mademi_rg.name
+  name                 = "subnet-1-mademi"
+  resource_group_name  = azurerm_resource_group.mademi_rg.name
   virtual_network_name = azurerm_virtual_network.mademi_vnet.name
-  address_prefixes = [ "10.0.10.0/24" ]
+  address_prefixes     = ["10.0.10.0/24"]
 }
 
 resource "azurerm_public_ip" "mademi_pip" {
-  name = "pip_mademi"
-  location = azurerm_resource_group.mademi_rg.location
-  sku = "Basic"
-  allocation_method = "Dynamic"
+  name                = "pip_mademi"
+  location            = azurerm_resource_group.mademi_rg.location
+  sku                 = "Basic"
+  allocation_method   = "Dynamic"
   resource_group_name = azurerm_resource_group.mademi_rg.name
 }
 
