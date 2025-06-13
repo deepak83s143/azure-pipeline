@@ -43,7 +43,7 @@ resource "azurerm_virtual_machine" "mademi_vm" {
   resource_group_name = azurerm_resource_group.mademi_rg.name
   location = azurerm_resource_group.mademi_rg.location
   vm_size = "Standard_D2s_v3"
-  network_interface_ids = [azurerm_network_interface.mademi_interface.id, azurerm_public_ip.mademi_pip.id]  
+  network_interface_ids = [azurerm_network_interface.mademi_interface.id]  
   storage_os_disk {
     name = "MDM-VM-DISK"
     caching = "ReadWrite"
