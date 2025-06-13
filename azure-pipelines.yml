@@ -17,6 +17,7 @@ stages:
         displayName: InfraInit
         steps:
           - task: TerraformTask@5
+            displayName: TerraformInit
             inputs:
               provider: 'azurerm'
               command: 'init'
@@ -32,6 +33,7 @@ stages:
         displayName: InfraProvisioning
         steps:
           - task: TerraformTask@5
+            displayName: InfraInit
             inputs:
               provider: 'azurerm'
               command: 'init'
@@ -41,6 +43,7 @@ stages:
               backendAzureRmContainerName: 'mademistatefiles'
               backendAzureRmKey: 'azurepipeline.terraform.tfstate'
           - task: TerraformTask@5
+            displayName: InfraPlaning
             inputs:
               provider: 'azurerm'
               command: 'plan'
@@ -52,6 +55,7 @@ stages:
         displayName: InfraApply
         steps:
           - task: TerraformTask@5
+            displayName: InfraProvisioningInitializing
             inputs:
               provider: 'azurerm'
               command: 'init'
@@ -61,6 +65,7 @@ stages:
               backendAzureRmContainerName: 'mademistatefiles'
               backendAzureRmKey: 'azurepipeline.terraform.tfstate'
           - task: TerraformTask@5
+            displayName: InfraProvisioningStart
             inputs:
               provider: 'azurerm'
               command: 'apply'

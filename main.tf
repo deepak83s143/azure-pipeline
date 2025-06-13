@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "mademi_rg" {
   name     = "deepak-rg"
-  location = "eastus"
+  location = "centralindia"
 }
 
 resource "azurerm_virtual_network" "mademi_vnet" {
@@ -25,9 +25,45 @@ resource "azurerm_public_ip" "mademi_pip" {
   resource_group_name = azurerm_resource_group.mademi_rg.name
 }
 
-resource "azurerm_resource_group" "mademi_rg1" {
-  name     = "deepak-rg1"
-  location = "eastus"
+resource "azurerm_network_interface" "mademi_interface" {
+  depends_on = [ azurerm_public_ip.mademi_pip ]
+  name = "mdm-int"
+  resource_group_name = azurerm_resource_group.mademi_rg.name
+  location = azurerm_resource_group.mademi_rg.location
+  ip_configuration {
+    name = "mdm-ip"
+    private_ip_address_allocation = "Dynamic"
+    subnet_id = azurerm_subnet.mademi_subnet.id
+    public_ip_address_id = azurerm_public_ip.mademi_pip.id
+  }
+}
+
+resource "azurerm_virtual_machine" "mademi_vm" {
+  name = "MDM-VM"
+  resource_group_name = azurerm_resource_group.mademi_rg.name
+  location = azurerm_resource_group.mademi_rg.location
+  vm_size = "Standard_D2s_v3"
+  network_interface_ids = [azurerm_network_interface.mademi_interface.id, azurerm_public_ip.mademi_pip.id]  
+  storage_os_disk {
+    name = "MDM-VM-DISK"
+    caching = "ReadWrite"
+    create_option = "FromImage"
+  }
+  storage_image_reference {
+    publisher = "canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+  os_profile {
+    computer_name = "MDM-TEST"
+    admin_username = "mademi"
+    admin_password = "Testing@54321"
+  }  
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
+  delete_os_disk_on_termination = true
 }
 
 
@@ -47,4 +83,12 @@ output "mademi_rg_id" {
 
 output "mademi_rg_location" {
   value = azurerm_resource_group.mademi_rg.location
+}
+
+output "mademi_pip_id" {
+  value = azurerm_public_ip.mademi_pip.ip_address
+}
+
+output "mademi_interface" {
+  value = azurerm_network_interface.mademi_interface.id
 }
