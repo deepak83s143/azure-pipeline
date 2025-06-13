@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "mademi_rg" {
-  name     = "mdm-rg"
+  name     = "testing-rg-mdm"
   location = "centralindia"
 }
 
