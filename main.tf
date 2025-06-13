@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "mademi_rg" {
-  name     = "deepak-rg"
+  name     = "mdm-rg"
   location = "centralindia"
 }
 
