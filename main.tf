@@ -25,7 +25,10 @@ resource "azurerm_public_ip" "mademi_pip" {
   resource_group_name = azurerm_resource_group.mademi_rg.name
 }
 
-
+resource "azurerm_resource_group" "mademi_rg" {
+  name     = "deepak-rg1"
+  location = "eastus"
+}
 
 
 
